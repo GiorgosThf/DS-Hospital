@@ -1,0 +1,1419 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DS Hospital API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/admin/login": {
+      "post": {
+        "tags": ["Admin"],
+        "description": "Admin login endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "login credentials",
+            "in": "body",
+            "description": "JSON data for admin login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["username", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/admin/logout": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Admin logout endpoint",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful logout response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Admin Logged Out": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/admin/create_doctor": {
+      "post": {
+        "tags": ["Admin"],
+        "description": "Create a new doctor",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "doctor data",
+            "in": "body",
+            "description": "JSON data for creating a new doctor",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DoctorData"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "cid": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "specialization": {
+                      "type": "string"
+                    },
+                    "appointment_cost": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/admin/update_doctor_password": {
+      "put": {
+        "tags": ["Admin"],
+        "description": "Update doctor's password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "password update data",
+            "in": "body",
+            "description": "JSON data for updating doctor's password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "old_password": {
+                  "type": "string"
+                },
+                "new_password": {
+                  "type": "string"
+                }
+              },
+              "required": ["username", "old_password", "new_password"]
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Password changed": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/admin/delete_doctor/{doctor_username}": {
+      "delete": {
+        "tags": ["Admin"],
+        "description": "Delete a doctor",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "doctor_username",
+            "in": "path",
+            "description": "Username of the doctor to be deleted",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Doctor deleted": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/admin/delete_patient/{patient_username}": {
+      "delete": {
+        "tags": ["Admin"],
+        "description": "Delete a patient by username",
+        "parameters": [
+          {
+            "name": "patient_username",
+            "in": "path",
+            "description": "Username of the patient to be deleted",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Patient deleted": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_deletion>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/doctor/login": {
+      "post": {
+        "tags": ["Doctor"],
+        "description": "Login for doctors",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Doctor's credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "dr_smith"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "dr_smith"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "<token_created>"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_login>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/doctor/logout": {
+      "get": {
+        "tags": ["Doctor"],
+        "description": "Logout for doctors",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful logout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Doctor Logged Out": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_logout>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/doctor/update_doctor_password": {
+      "put": {
+        "tags": ["Doctor"],
+        "description": "Update doctor's password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Doctor's old and new passwords",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "dr_smith"
+                },
+                "old_password": {
+                  "type": "string",
+                  "example": "password123"
+                },
+                "new_password": {
+                  "type": "string",
+                  "example": "newpassword456"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Password Changed": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_update>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/doctor/update_appointment_cost": {
+      "put": {
+        "tags": ["Doctor"],
+        "description": "Update doctor's appointment cost",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Doctor's old and new appointment costs",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "dr_smith"
+                },
+                "old_cost": {
+                  "type": "number",
+                  "example": 150.0
+                },
+                "new_cost": {
+                  "type": "number",
+                  "example": 200.0
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment cost updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Appointment cost updated": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_update>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/doctor/appointments": {
+      "get": {
+        "tags": ["Doctor"],
+        "description": "Fetch appointments for the logged-in doctor",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of appointments",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cid": {
+                        "type": "string",
+                        "example": "APT_4746881"
+                      },
+                      "patient_name": {
+                        "type": "string",
+                        "example": "John"
+                      },
+                      "patient_surname": {
+                        "type": "string",
+                        "example": "Doe"
+                      },
+                      "appointment_time": {
+                        "type": "string",
+                        "example": "10:00"
+                      },
+                      "appointment_date": {
+                        "type": "string",
+                        "example": "2024-07-01"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "example": "General Checkup"
+                      }
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_request>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/login": {
+      "post": {
+        "tags": ["Patient"],
+        "description": "Login for patients",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Patient's credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "john_doe"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "<token_created>"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "date_of_login"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/logout": {
+      "get": {
+        "tags": ["Patient"],
+        "description": "Logout for patients",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful logout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Patient Logged Out": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_logout>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/register": {
+      "post": {
+        "tags": ["Patient"],
+        "description": "Register a new patient",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Patient's registration details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "john_doe"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@example.com"
+                },
+                "first_name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "amka": {
+                  "type": "string",
+                  "example": "123456789"
+                },
+                "date_of_birth": {
+                  "type": "string",
+                  "example": "1997-20-06"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful registration",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "<token_created>"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_registration>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/book_appointment": {
+      "post": {
+        "tags": ["Patient"],
+        "description": "Book an appointment with a doctor",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Appointment details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "appointment_date": {
+                  "type": "string",
+                  "example": "2024-07-01"
+                },
+                "appointment_time": {
+                  "type": "string",
+                  "example": "10:00"
+                },
+                "reason": {
+                  "type": "string",
+                  "example": "General Checkup"
+                },
+                "specialization": {
+                  "type": "string",
+                  "example": "Cardiologist"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment booked successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "cid": {
+                      "type": "string",
+                      "example": "APT_4746881"
+                    },
+                    "doctor_username": {
+                      "type": "string",
+                      "example": "dr_smith"
+                    },
+                    "patient_username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    },
+                    "patient_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "patient_surname": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "doctor_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "doctor_surname": {
+                      "type": "string",
+                      "example": "Smith"
+                    },
+                    "appointment_date": {
+                      "type": "string",
+                      "example": "2024-07-01"
+                    },
+                    "appointment_time": {
+                      "type": "string",
+                      "example": "10:00"
+                    },
+                    "reason": {
+                      "type": "string",
+                      "example": "General Checkup"
+                    },
+                    "cost": {
+                      "type": "number",
+                      "example": 200.0
+                    },
+                    "specialization": {
+                      "type": "string",
+                      "example": "Cardiologist"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "date_of_book"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/appointments": {
+      "get": {
+        "tags": ["Patient"],
+        "description": "Fetch appointments for the logged-in patient",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of appointments",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cid": {
+                        "type": "string",
+                        "example": "APT_4746881"
+                      },
+                      "doctor_name": {
+                        "type": "string",
+                        "example": "John"
+                      },
+                      "doctor_surname": {
+                        "type": "string",
+                        "example": "Smith"
+                      },
+                      "appointment_time": {
+                        "type": "string",
+                        "example": "10:00"
+                      },
+                      "appointment_date": {
+                        "type": "string",
+                        "example": "2024-07-01"
+                      }
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_request>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/appointment/{appointment_id}": {
+      "get": {
+        "tags": ["Patient"],
+        "description": "Fetch details of a specific appointment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "description": "System generated cid for the appointment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the appointment",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "cid": {
+                      "type": "string",
+                      "example": "APT_4746881"
+                    },
+                    "doctor_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "doctor_surname": {
+                      "type": "string",
+                      "example": "Smith"
+                    },
+                    "appointment_time": {
+                      "type": "string",
+                      "example": "10:00"
+                    },
+                    "appointment_date": {
+                      "type": "string",
+                      "example": "2024-07-01"
+                    },
+                    "specialization": {
+                      "type": "string",
+                      "example": "Cardiologist"
+                    },
+                    "cost": {
+                      "type": "number",
+                      "example": 200.0
+                    },
+                    "reason": {
+                      "type": "string",
+                      "example": "General Checkup"
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_request>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/patient/cancel_appointment/{appointment_id}": {
+      "delete": {
+        "tags": ["Patient"],
+        "description": "Cancel a specific appointment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "description": "System generated cid for the appointment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment canceled successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Appointment canceled": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "<date_of_cancellation>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DoctorData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "doctor"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        },
+        "email": {
+          "type": "string",
+          "example": "doctor@email.com"
+        },
+        "first_name": {
+          "type": "string",
+          "example": "John"
+        },
+        "last_name": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "specialization": {
+          "type": "string",
+          "example": ["Cardiologist", "Radiologist", "Hematologist", "Allergist", "Pathologist"]
+        },
+        "appointment_cost": {
+          "type": "number",
+          "example": 200
+        }
+      },
+      "required": ["username", "password", "email", "first_name", "last_name", "specialization", "appointment_cost"]
+    },
+    "AdminLoginData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "admin"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      },
+      "required":["username","password"]
+    },
+    "DoctorLoginData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "dr_smith"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      },
+      "required":["username","password"]
+    },
+    "DoctorPasswordUpdateData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "dr_smith"
+        },
+        "old_password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "new_password": {
+          "type": "string",
+          "example": "newpassword456"
+        }
+      },
+      "required":["username","old_password","new_password"]
+    },
+    "DoctorAppointmentCostUpdateData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "dr_smith"
+        },
+        "old_cost": {
+          "type": "number",
+          "example": 150.0
+        },
+        "new_cost": {
+          "type": "number",
+          "example": 200.0
+        }
+      },
+      "required":["username","old_cost","new_cost"]
+    },
+    "PatientLoginData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "john_doe"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      },
+      "required":["username","password"]
+    },
+    "PatientRegistrationData": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "john_doe"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "email": {
+          "type": "string",
+          "example": "john.doe@example.com"
+        },
+        "first_name": {
+          "type": "string",
+          "example": "John"
+        },
+        "last_name": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "amka": {
+          "type": "string",
+          "example": "123456789"
+        },
+        "date_of_birth": {
+          "type": "string",
+          "example": "1997-20-06"
+        }
+      },
+      "required":["username","password","email","first_name","last_name","amka","date_of_birth"]
+    },
+    "PatientAppointmentData": {
+      "type": "object",
+      "properties": {
+        "appointment_date": {
+          "type": "string",
+          "example": "2024-07-01"
+        },
+        "appointment_time": {
+          "type": "string",
+          "example": "10:00"
+        },
+        "reason": {
+          "type": "string",
+          "example": "General Checkup"
+        },
+        "specialization": {
+          "type": "string",
+          "example": "Cardiologist"
+        }
+      },
+      "required":["appointment_date","appointment_time","reason","specialization"]
+    }
+  },
+
+"tags": [
+    {
+      "name": "Admin",
+      "description": "Endpoints related to admin operations"
+    },
+    {
+      "name": "Doctor",
+      "description": "Endpoints related to doctor operations"
+    },
+    {
+      "name": "Patient",
+      "description": "Endpoints related to patient operations"
+    }
+  ]
+}
