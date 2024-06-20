@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    environment {
+        SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: 'master']],
+                        extensions: [], userRemoteConfigs: [[credentialsId: 'SecretKey', url: 'https://github.com/GiorgosThf/DS-Hospital.git']])
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                     python3 -m venv venv
+                    . venv/bin/activate
+                    ./venv/bin/pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run Tests with Coverage') {
+            steps {
+                script{
+                    try{
+
+                        sh '''
+                    . venv/bin/activate
+                    ./venv/bin/python3 -m pytest src/tests --alluredir allure-results --cov=src --cov-report=xml --cov-report=html
+                '''
+                    } catch (Exception e) {
+                        // Mark the build as unstable if tests fail
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
+
+
+        stage('SonarQube Analysis') {
+            steps{
+                script{
+                    withSonarQubeEnv('SonarQubeServer') {
+                        sh '''
+                                ${SONAR_SCANNER_HOME}/bin/sonar-scanner
+                                '''
+                    }
+                }
+
+            }
+        }
+        stage('Generate Allure Report') {
+            steps {
+                allure([
+                        includeProperties: false,
+                        jdk              : '',
+                        properties       : [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results          : [[path: "DS-Hospital/allure-results"]]
+                ])
+            }
+        }
+    }
+}

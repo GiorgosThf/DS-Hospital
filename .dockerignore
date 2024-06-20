@@ -1,0 +1,12 @@
+.idea
+app.log
+DS-Hospital.iml
+allure-report
+allure-results
+htmlcov
+lib
+.coverage
+coverage.xml
+.scannerwork
+jenkins-sonar
+README.md
