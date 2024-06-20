@@ -172,3 +172,4 @@ report.html
 allure-report
 allure-results
 .scannerwork
+/.idea/**
