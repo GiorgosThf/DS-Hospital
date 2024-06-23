@@ -108,9 +108,35 @@
 
 ---
 
-# Flask Application Setup
+# Implementation And Assumptions
 
-### Technologies Used
+This backend system is designed to accept requests and send responses from three different categories of users
+implementing JWT Authentication with three different secret keys each one representing the role of the user.
+
+This helps us decouple the system and give access to a part of the backend system depending on the role and the
+url the request has been made from, for example you can only access the endpoints of admin using the '/admin' prefix in
+the url
+otherwise the system will not recognise the endpoint resulting into not processing the request.
+
+For example, if you log in as a user and then proceed to try and access the url of the admin endpoints using the token
+generated during the log in process of the user , the system will not Authorize the request as it would not be able to
+decode the token and extract the username.
+
+This system is specifically designed to be used from three different frontend systems where each one of them is
+implementing
+their own login , logout and register functionalities making the system more robust and safe , although one frontend
+system can be implemented having different interfaces for the different roles is highly recommended to keep each
+interface
+seperated as this gives the ability to integrate more complex functionalities in the future for each system without
+interfering
+with changes made to the others, and keep the access to different user role resources hidden from the other type of
+users.
+
+# Technologies Used
+
+---
+
+## Tech Stack
 
 - **Backend** Framework: Utilized Python and Flask as the backend framework for building RESTful APIs.
 - **Database**: MongoDB was chosen as the database to store application data.
@@ -128,6 +154,10 @@
       build and deployment process. There is a guide on how to.
     - **Code Quality and Coverage**: Set up Sonarqube server for code quality and coverage testing using docker. There
       is a guide on how to.
+
+# Flask Application Setup
+
+---
 
 ## Key Components
 
